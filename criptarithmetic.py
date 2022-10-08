@@ -1,29 +1,21 @@
-from csp import Constraint, CSP
-from typing import Dict, List, Optional
-  
-  
-class SendMoreMoneyConstraint(Constraint[str, int]):
-     def __init__(self, letters: List[str]) -> None:
-         super().__init__(letters)
-         self.letters: List[str] = letters
-  
-     def satisfied(self, assignment: Dict[str, int]) -> bool:
-         # if there are duplicate values then it's not a solution
-         if len(set(assignment.values())) < len(assignment):
-             return False
-  
-         # if all variables have been assigned, check if it adds correctly
-         if len(assignment) == len(self.letters):
-             s: int = assignment["S"]
-             e: int = assignment["E"]
-             n: int = assignment["N"]
-             d: int = assignment["D"]
-             m: int = assignment["M"]
-             o: int = assignment["O"]
-             r: int = assignment["R"]
-             y: int = assignment["Y"]
-             send: int = s * 1000 + e * 100 + n * 10 + d
-             more: int = m * 1000 + o * 100 + r * 10 + e
-             money: int = m * 10000 + o * 1000 + n * 100 + e * 10 + y
-             return send + more == money
-         return True # no conflict
+def solutions():
+    # letters = ('s', 'e', 'n', 'd', 'm', 'o', 'r', 'y')
+    all_solutions = list()
+    for s in range(9, -1, -1):
+        for e in range(9, -1, -1):
+            for n in range(9, -1, -1):
+                for d in range(9, -1, -1):
+                    for m in range(9, 0, -1):
+                        for o in range(9, -1, -1):
+                            for r in range(9, -1, -1):
+                                for y in range(9, -1, -1):
+                                    if len(set([s, e, n, d, m, o, r, y])) == 8:
+                                        send = 1000 * s + 100 * e + 10 * n + d
+                                        more = 1000 * m + 100 * o + 10 * r + e
+                                        money = 10000 * m + 1000 * o + 100 * n + 10 * e + y
+
+                                        if send + more == money:
+                                            all_solutions.append((send, more, money))
+    return all_solutions
+
+print(solutions())
